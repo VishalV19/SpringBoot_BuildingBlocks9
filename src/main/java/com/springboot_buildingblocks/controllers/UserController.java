@@ -7,23 +7,31 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.springboot_buildingblocks.entities.User;
-import com.springboot_buildingblocks.entities.UserExitsException;
+import com.springboot_buildingblocks.exceptions.UserExitsException;
+import com.springboot_buildingblocks.exceptions.UserNameNotFoundException;
 import com.springboot_buildingblocks.exceptions.UserNotFoundException;
 import com.springboot_buildingblocks.services.UserService;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+
 //Controller
 @RestController
+@Validated
+@RequestMapping(value = "/users")
 public class UserController {
 
 	@Autowired // Autowird the UserService 
@@ -31,7 +39,7 @@ public class UserController {
 	
 	
 	//getAllUsers method
-	@GetMapping("/users")
+	@GetMapping
 	public List<User> getAllusers(){
 		return userService.getAllUsers();
 		
@@ -57,8 +65,8 @@ public class UserController {
 	} */
 	
 	
-	@PostMapping("/users") // Chapter 37
-	public ResponseEntity<Void> createUser(@RequestBody User user, UriComponentsBuilder builder) {
+	@PostMapping // Chapter 37
+	public ResponseEntity<Void> createUser(@Valid @RequestBody User user, UriComponentsBuilder builder) {
 		try {
 			userService.createUser(user);
 			HttpHeaders headers = new HttpHeaders();
@@ -70,7 +78,7 @@ public class UserController {
 				
 	}
 	
-	//---------------getUserById method --------------------
+	//--------------- getUserById method --------------------
 	
 /*	@GetMapping("/users/{id}")
 	public Optional<User> getUserById(@PathVariable("id") Long id){
@@ -78,8 +86,18 @@ public class UserController {
 		
 	} */
 	
-	@GetMapping("/users/{id}")
+/*	@GetMapping("/users/{id}")
 	public Optional<User> getUserById(@PathVariable("id") Long id){
+		try {
+			return userService.getUserById(id);
+		}catch(UserNotFoundException ex) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
+		}
+		
+	} */
+	
+	@GetMapping("/{id}") // Chatper 46
+	public Optional<User> getUserById(@PathVariable("id") @Min(1) Long id){
 		try {
 			return userService.getUserById(id);
 		}catch(UserNotFoundException ex) {
@@ -98,7 +116,7 @@ public class UserController {
 	} */
 	
 	
-	@PutMapping("/users/{id}")
+	@PutMapping("/{id}")
 	public User updateUserById(@PathVariable("id") Long id, @RequestBody User user) throws Exception{
 		try {
 			return userService.updateUserByid(user, id);
@@ -112,7 +130,7 @@ public class UserController {
 	// ---------------------------------------------------------------------
 	
 	//deleteById
-	@DeleteMapping("/users/{id}")
+	@DeleteMapping("/{id}")
 	public void deleteById(@PathVariable("id") Long Id){
 		userService.deleteUserById(Id);
 	} 
@@ -124,10 +142,22 @@ public class UserController {
 	
 	// ------------------------------------------------------------------
 	
+
 	//getUserByUsername
-	@GetMapping("/users/byusername/{username}")
+/*	@GetMapping("/users/byusername/{username}")
 	public User getUserByUsername(@PathVariable("username") String username) {
 		return userService.getUserByUsername(username);
-	}
+	} */
 	
+	
+	//Chapter - 45 -: Implement UserNotFoundException in GEH
+	@GetMapping("/byusername/{username}")
+	public User getUserByUsername(@PathVariable("username") String username) throws UserNameNotFoundException {
+		User user = userService.getUserByUsername(username);
+		if(user == null) {
+			throw new UserNameNotFoundException("username: '" +username+ "'not found in user repository");
+			
+		}
+		return user;
+	}
 }

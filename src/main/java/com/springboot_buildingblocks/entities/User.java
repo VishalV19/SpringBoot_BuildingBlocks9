@@ -1,45 +1,56 @@
 package com.springboot_buildingblocks.entities;
 
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 
 //Entity
 @Entity
 @Table(name = "user")
 public class User {
-	
+
 	@Id
 	@GeneratedValue
 	private Long id;
-			
-	@Column(name = "FRISTNAME", length=50, nullable=false)
+
+	@Size(min = 2, message = "First name should have atleast two charaters")
+	@Column(name = "FRISTNAME", length = 50, nullable = false)
 	private String firstname;
-	
-	@Column(name = "LASTNAME", length=50, nullable=false)
+
+	@Column(name = "LASTNAME", length = 50, nullable = false)
 	private String lastname;
-	
-	@Column(name = "EMAIL", length=50, nullable=false)
+
+	@Column(name = "EMAIL", length = 50, nullable = false)
 	private String email;
-	
-	@Column(name = "ROLE", length=50, nullable=false)
+
+	@Column(name = "ROLE", length = 50, nullable = false)
 	private String role;
-	
-	@Column(name = "SSN",length=50, nullable=false, unique=false)
+
+	@Column(name = "SSN", length = 50, nullable = false, unique = false)
 	private String ssn;
 	
-	@Column(name = "USERNAME",length=50, nullable=false, unique=true)
+	@OneToMany(mappedBy = "user")
+	private List<Order> orders;
+	
+
+	@NotEmpty(message = "Username is Mandatory field. Please provide username")
+	@Column(name = "USERNAME", length = 50, nullable = false, unique = true)
 	private String username;
 
-	//No args constructor
+	// No args constructor
 	public User() {
-		
+
 		// TODO Auto-generated constructor stub
 	}
-	
-	//field constructor
+
+	// field constructor
 	public User(Long id, String username, String lastname, String email, String role, String ssn) {
 		super();
 		this.id = id;
@@ -48,11 +59,11 @@ public class User {
 		this.email = email;
 		this.role = role;
 		this.ssn = ssn;
-		this.username=username;
+		this.username = username;
 	}
 
 	// Getter & Setters
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -108,16 +119,22 @@ public class User {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-
 	
+	public List<Order> getOrders() {
+		return orders;
+	}
+
+	public void setOrders(List<Order> orders) {
+		this.orders = orders;
+	}
+
 	// To String Method
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", firstname=" + firstname + ", lastname=" + lastname + ", email=" + email + ", role="
 				+ role + ", ssn=" + ssn + ", username=" + username + "]";
 	}
-	
-	
-	
+
+
+
 }
-	

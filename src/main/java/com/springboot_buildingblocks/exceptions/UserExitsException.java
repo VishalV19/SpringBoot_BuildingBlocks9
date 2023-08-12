@@ -1,4 +1,4 @@
-package com.springboot_buildingblocks.entities;
+package com.springboot_buildingblocks.exceptions;
 
 public class UserExitsException extends Exception {
 

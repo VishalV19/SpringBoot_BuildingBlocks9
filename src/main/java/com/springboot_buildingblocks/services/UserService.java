@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.springboot_buildingblocks.entities.User;
-import com.springboot_buildingblocks.entities.UserExitsException;
+import com.springboot_buildingblocks.exceptions.UserExitsException;
 import com.springboot_buildingblocks.exceptions.UserNotFoundException;
 import com.springboot_buildingblocks.repositories.UserRepository;
 
