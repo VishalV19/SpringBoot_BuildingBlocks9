@@ -2,6 +2,8 @@ package com.springboot_buildingblocks.entities;
 
 import java.util.List;
 
+import org.springframework.hateoas.RepresentationModel; //Chapter - 61
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -11,10 +13,10 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
-//Entity
+
 @Entity
 @Table(name = "user")
-public class User {
+public class User extends RepresentationModel<User>{
 
 	@Id
 	@GeneratedValue
@@ -132,8 +134,12 @@ public class User {
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", firstname=" + firstname + ", lastname=" + lastname + ", email=" + email + ", role="
-				+ role + ", ssn=" + ssn + ", username=" + username + "]";
+				+ role + ", ssn=" + ssn + ", orders=" + orders + ", username=" + username + "]";
 	}
+
+	
+	
+	
 
 
 
