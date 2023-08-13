@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class HelloWorldController {
 	
 	@Autowired
-	private ResourceBundleMessageSource messageSource;
+	private ResourceBundleMessageSource messageSource; // Java predefined class
 
 		// Simple method
 	// URI - /helloworld
@@ -33,12 +33,12 @@ public class HelloWorldController {
 		return new UserDetails("Vishal", "Singh", "Boston");
 	}
 	
-	@GetMapping("/helloworld-int")
+	@GetMapping("/helloworld-int") // Chapter - 69
 	public String getMessagesInI18NFormat(@RequestHeader(name = "Accept-Language", required = false) String locale) {
 		return messageSource.getMessage("label.hellow", null, new Locale(locale));
 	}
 	
-	@GetMapping("/helloworld-int2")
+	@GetMapping("/helloworld-int2") // Chapter - 69
 	public String getMessagesInI18NFormat2(){
 		return messageSource.getMessage("label.hellow", null, LocaleContextHolder.getLocale());
 	}

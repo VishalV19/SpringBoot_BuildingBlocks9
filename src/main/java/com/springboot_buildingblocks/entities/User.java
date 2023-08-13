@@ -4,6 +4,9 @@ import java.util.List;
 
 import org.springframework.hateoas.RepresentationModel; //Chapter - 61
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,6 +19,7 @@ import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "user")
+@JsonIgnoreProperties({"firstname","lastname"})
 public class User extends RepresentationModel<User>{
 
 	@Id
@@ -35,7 +39,8 @@ public class User extends RepresentationModel<User>{
 	@Column(name = "ROLE", length = 50, nullable = false)
 	private String role;
 
-	@Column(name = "SSN", length = 50, nullable = false, unique = false)
+	@Column(name = "SSN", length = 50, nullable = true, unique = false)
+	@JsonIgnore
 	private String ssn;
 	
 	@OneToMany(mappedBy = "user")
