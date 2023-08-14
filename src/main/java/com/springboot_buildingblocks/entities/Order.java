@@ -3,6 +3,7 @@ package com.springboot_buildingblocks.entities;
 import org.springframework.hateoas.RepresentationModel;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -17,7 +18,10 @@ public class Order extends RepresentationModel<Order>{
 	
 	@Id
 	@GeneratedValue
+	@JsonView(Views.Internal.class)
 	private Long orderid;
+	
+	@JsonView(Views.Internal.class)
 	private String orderdescription;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
